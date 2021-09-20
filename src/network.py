@@ -26,8 +26,8 @@ class Network:
             pos = [random.randint(50, self.width - 50), random.randint(50, self.height - 50)]
             self.Nodes.append(Node(pos, i))
             self.seq.append(i)
-            pygame.draw.circle(self.screen, Black, pos, 5)
-            time.sleep(0.1)
+            pygame.draw.circle(self.screen, Green, pos, Node_size)
+            # time.sleep(0.1)
             pygame.display.update()
         # 根据埃尔德什模型初始化连边
         res = []
@@ -35,10 +35,19 @@ class Network:
         init_match(nums=self.seq, res=res)
         # 利用匹配数组，初始化边
         init_arc(self.screen, res, self.Nodes)
+        # 为了便于观察，将所有节点重新绘制一遍
+        for node in self.Nodes:
+            pygame.draw.circle(self.screen, Green, node.position, Node_size)
+            # time.sleep(0.1)
+            pygame.display.update()
 
     def export_datas(self):
-        degrees = self.export_degrees()
-        data_write_csv(Datapath, degrees)
+        datas = self.export_degrees()
+        data_write_csv(Datapath, datas)
+        sum = 0
+        for i in range(len(datas[0])):
+            sum += datas[0][i] * datas[1][i]
+        print('平均度：', sum // N)
 
     def init_pygame(self):
         pygame.init()
@@ -60,4 +69,9 @@ class Network:
         res = []
         for i in self.Nodes:
             res.append(i.degree)
-        return res
+        data = [[], []]
+        for i in range(int(2 * N * P)):
+            if i in res:
+                data[0].append(i)
+                data[1].append(res.count(i))
+        return data
