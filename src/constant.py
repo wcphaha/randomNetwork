@@ -1,6 +1,5 @@
 import random
 import time
-
 import pandas as pd
 import pygame
 
@@ -65,11 +64,10 @@ def init_arc(screen, s, nodes):
             i[0].update_degree()
             i[1].update_degree()
             pygame.draw.line(screen, Purple, i[0].position, i[1].position, 1)
-            time.sleep(0.2)
+            # time.sleep(0.2)
             pygame.display.update()
 
 
-# 需要修改，添加序列号，以（X,Y）形式存储
 def data_write_csv(file_name, datas):
     a, b = datas[0], datas[1]
     dataframe = pd.DataFrame({'degree': a, 'count': b})

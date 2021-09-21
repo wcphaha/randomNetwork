@@ -64,6 +64,14 @@ class Network:
         for event in pygame.event.get():
             if event.type == QUIT:
                 exit()
+            if event.type == KEYDOWN:
+                if event.key == K_m:
+                    # 当按下M键时，输出一下所有节点的度
+                    degrees = []
+                    for i in self.Nodes:
+                        degrees.append(i.degree)
+                    degrees.sort(reverse=True)
+                    print(degrees)
 
     def export_degrees(self):
         res = []
