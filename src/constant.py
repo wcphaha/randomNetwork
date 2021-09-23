@@ -6,8 +6,8 @@ import pygame
 Title = '随机网络生成过程'
 Width = 1000
 Height = 700
-P = 0.05
-N = 101
+P = 0.015
+N = 100
 Node_size = 8
 # 线条颜色
 Black = (0, 0, 0)
@@ -17,7 +17,8 @@ Blue = (0, 0, 255)
 GreenYellow = (173, 255, 47)
 Green = (50, 205, 50)
 Purple = (160, 32, 240)
-Datapath = 'datas/Network_info.txt'
+degree_datapath = 'datas/Degree_info.txt'
+adjMatrix_datapath = 'datas/Matrix.txt'
 
 
 class Node:
@@ -34,38 +35,22 @@ class Node:
         return f'序号:{self.seq},度:{self.degree},位置:{self.position}'
 
 
-def init_match(nums, res, n=2, track=[]):
-    if 2 == len(track):
-        t = list(track)
-        t.sort()
-        if t not in res:
-            res.append(t)
-            return
-        else:
-            return
-    for i in nums:
-        if i in track:
-            continue
-        track.append(i)
-        init_match(res=res, nums=nums, track=track)
-        track.pop()
-    nums = nums[1:]
-
-
 def init_arc(screen, s, nodes):
     match = []
-    for i in nodes:
-        for j in nodes:
-            if [i.seq, j.seq] in s:
-                match.append([i, j])
+    for item in s:
+        match.append([nodes[item[0]], nodes[item[1]]])
+    m = []
     for i in match:
         rand_number = random.random()
         if rand_number < P:
+            m.append(i[:])
             i[0].update_degree()
             i[1].update_degree()
             pygame.draw.line(screen, Purple, i[0].position, i[1].position, 1)
             # time.sleep(0.2)
             pygame.display.update()
+    # 返回所有的连边
+    return m
 
 
 def data_write_csv(file_name, datas):
